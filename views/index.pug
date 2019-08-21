@@ -1,0 +1,63 @@
+doctype html
+html
+	head
+		title Your Trades of Liquid
+		link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
+		link(rel='stylesheet', href='https://code.jquery.com/ui/1.12.1/themes/dark-hive/jquery-ui.css')
+		link(rel='stylesheet', href="https://use.fontawesome.com/releases/v5.7.0/css/all.css", integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ",crossorigin="anonymous")
+		link(rel='stylesheet', href='/style.css')
+	body
+		.container
+			.row
+				.col-12
+					h1 Your Trades of Liquid
+				.col-md-2
+					form.liquid_repot
+						.form-row
+							.form-group.col-md-12
+								label(for="liquid_key") Liquid ID
+								input#liquid_key.form-control(type='text' placeholder='Liquid ID',autocomplete="off")
+							.form-group.col-md-12
+								label(for="liquid_key") Liquid Token
+								input#liquid_secret.form-control(type='password' placeholder='Liquid Token',autocomplete="off")
+							.form-group.col-md-12
+								label(for="from") From
+								input#from.form-control(type="text")
+							.form-group.col-md-12
+								input#polling.form-check-input(type="checkbox")
+								label(for="polling") polling
+							.form-group.col-md-12
+								button.btn.btn-primary.btn-secondary(type='submit') report
+					.alert.alert-danger.d-none(role="alert")
+								| A simple danger alert—check it out!
+				.col-md-10
+					dl.row.liquid_repot_draw
+					#profit_chart
+					table.table.table-dark.table-sm
+						thead
+							tr
+								th id
+								th symbol
+								th side
+								th open
+								th open price
+								th close
+								th close price
+								th amount
+								th profit
+						tbody
+				.col-12
+					.text-right
+						a(href="https://twitter.com/sakiyama100") さきやま(twitter)
+		script(src="https://code.jquery.com/jquery-3.4.1.min.js",integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=",crossorigin="anonymous")
+		script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js", integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=",crossorigin="anonymous")
+		script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
+		script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
+		script(type="text/javascript",src="http://d3js.org/d3.v5.min.js")
+		script(type="text/javascript",src="https://cdn.jsdelivr.net/npm/ccxt@1.18.1072/dist/ccxt.browser.js")
+		script(type="text/javascript",src="https://cdn.plot.ly/plotly-latest.min.js")
+		//
+			script(type="text/javascript",src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
+			script(type="text/javascript",src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ja.js")
+			script(type="text/javascript",src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js")
+		script(type="text/javascript",src="/report.js")
