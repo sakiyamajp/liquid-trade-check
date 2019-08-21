@@ -21,7 +21,6 @@ Thumbs.db
 /node_modules
 /logs
 /build
-/dist
 
 # sass generated files #
 ###########################
