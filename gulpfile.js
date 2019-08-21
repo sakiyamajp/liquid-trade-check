@@ -1,70 +1,112 @@
-var gulp = require('gulp');
-const babel = require('gulp-babel');
-const plumber = require('gulp-plumber');
-const browserSync = require('browser-sync').create();
-const nodemon = require('gulp-nodemon');
-const changed = require('gulp-changed');
+const gulp = require('gulp');
 const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
+const cssmin = require('gulp-cssmin');
+const browserSync = require('browser-sync').create();
+const concat = require('gulp-concat');
+const minify = require('gulp-minify');
+const rename = require('gulp-rename');
+const imagemin = require('gulp-imagemin');
+const fs = require('fs');
 
-var allJsSource = ['src/**/*.js'];
+const cssAddonsPath = './css/modules/';
 
-gulp.task('babel', function() {
-	return gulp.src(allJsSource)
-		.pipe(changed('dist'))
-		.pipe(plumber())
-		.pipe(babel())
-		.pipe(gulp.dest('dist'));
+// CSS Tasks
+gulp.task('css-compile-modules', (done) => {
+  gulp.src('scss/**/modules/**/*.scss')
+    .pipe(sass({outputStyle: 'nested'}).on('error', sass.logError))
+    .pipe(autoprefixer())
+    .pipe(rename({ dirname: cssAddonsPath }))
+    .pipe(gulp.dest('./dist/'));
+
+    done();
 });
-gulp.task('babelAll', function() {
-	return gulp.src(allJsSource)
-		.pipe(plumber())
-		.pipe(babel())
-		.pipe(gulp.dest('dist'));
+
+gulp.task('css-compile', gulp.series('css-compile-modules', () => {
+  return gulp.src('scss/*.scss')
+    .pipe(sass({outputStyle: 'nested'}).on('error', sass.logError))
+    .pipe(autoprefixer())
+    .pipe(gulp.dest('./dist/css/'));
+}));
+
+gulp.task('css-minify-modules', () => {
+  return gulp.src(['./dist/css/modules/*.css', '!./dist/css/modules/*.min.css'])
+    .pipe(cssmin())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest('./dist/css/modules'));
 });
-gulp.task('watch', function() {
-	return gulp.watch(allJsSource,gulp.series('babel'));
+
+gulp.task('css-minify', gulp.series('css-minify-modules', () => {
+    return gulp.src(['./dist/css/*.css', '!./dist/css/*.min.css', '!./dist/css/bootstrap.css'])
+      .pipe(cssmin())
+      .pipe(rename({suffix: '.min'}))
+      .pipe(gulp.dest('./dist/css'));
+}));
+
+// JavaScript Tasks
+gulp.task('js-build', () => {
+  const plugins = getJSModules();
+  return gulp.src(plugins.modules)
+    .pipe(concat('mdb.js'))
+    .pipe(gulp.dest('./dist/js/'));
+    gulp.start('js-lite-build');
+    gulp.start('js-minify');
 });
-gulp.task('sass', function () {
-  return gulp.src('./src/**/*.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./dist'));
+
+gulp.task('js-minify', () => {
+  return gulp.src(['./dist/js/mdb.js'])
+    .pipe(minify({
+      ext:{
+        // src:'.js',
+        min:'.min.js'
+      },
+      noSource: true,
+    }))
+    .pipe(gulp.dest('./dist/js'));
 });
-gulp.task('sass:watch', function() {
-	gulp.watch('./src/**/*.scss', gulp.series('sass'));
+
+// Image Compression
+gulp.task('img-compression', function() {
+  gulp.src('./img/*')
+    .pipe(imagemin([
+      imagemin.gifsicle({interlaced: true}),
+      imagemin.jpegtran({progressive: true}),
+      imagemin.optipng({optimizationLevel: 5}),
+      imagemin.svgo({
+        plugins: [
+          {removeViewBox: true},
+          {cleanupIDs: false}
+        ]
+      })
+    ]))
+    .pipe(gulp.dest('./dist/img'));
 });
-gulp.task('browser-sync', function() {
-	return browserSync.init({
-		proxy : "localhost:80",
-		ws : true,
-		watchTask : true,
-		notify: false,
-		files: ['dist/public/**/*', 'views/**/*']
-	},function(){
-	});
-});
-for(let option of [{
-	name : "nodemon",
-	exec : 'npm start'
-}]){
-	gulp.task(option.name, function (done) {
-		var stream = nodemon({
-			exec: option.exec,
-			// exec: 'npm run observer',
-			ext: 'html js css pug',
-			ignore: ['src','dist/public'],
-			tasks: [],
-			watch : ['dist'],
-			done: done
-		});
-		stream.on('restart', function() {
-			console.log('restarted!')
-		})
-		.on('crash', function() {
-			console.error('Application has crashed!\n')
-			stream.emit('restart', 10) // restart the server in 10 seconds
-		});
-		return stream;
-	});
+function reload(done) {
+  browserSync.reload();
+  done();
 }
 
-gulp.task('default',gulp.series('babelAll','sass',gulp.parallel('nodemon','browser-sync','watch','sass:watch')));
+// Live Server
+gulp.task('server', function(done) {
+  browserSync.init({
+    server: {
+      baseDir: "./dist",
+      directory: true
+    },
+    notify: false
+  });
+});
+gulp.task('watchfiles', function(done) {
+  gulp.watch("scss/**/*.scss", gulp.series('css-compile'));
+  gulp.watch(["dist/css/*.css", "!dist/css/*.min.css"], gulp.series('css-minify'));
+  gulp.watch("js/**/*.js", gulp.series('js-build'));
+  gulp.watch(["dist/js/*.js", "!dist/js/*.min.js"], gulp.series('js-minify'));
+  gulp.watch("**/*", {cwd: './img/'}, gulp.series('img-compression'));
+  gulp.watch("**/*", {cwd: './dist/'}, reload);
+});
+// Watch on everything
+gulp.task('default',gulp.parallel('watchfiles','server'));
+function getJSModules() {
+  delete require.cache[require.resolve('./js/modules.js')];
+  return require('./js/modules');
+}

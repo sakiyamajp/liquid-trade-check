@@ -1,36 +1,36 @@
 {
-  "name": "liquid-trade-check",
+  "name": "liquid-trade-observer",
   "version": "0.0.1",
-  "description": "",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node --max-old-space-size=65536 --trace-warnings dist/index.js"
+    "js-compile-plugins": "babel --presets env js/src/ --out-dir js/dist/",
+    "css-compile": "gulp css-compile",
+    "css-minify": "gulp css-minify",
+    "js-build": "gulp js-build",
+    "js-minify": "gulp js-minify"
   },
-  "engines": {
-    "node": "^10.15.3"
+  "repository": {
+    "type": "git",
+    "url": "http://git.mdbootstrap.com/mdb/jquery/jq-gulp.git"
   },
-  "keywords": [],
-  "author": "",
-  "dependencies": {
-    "express": "^4.16.4",
-    "jsonwebtoken": "^8.5.1",
-    "pug": "^2.0.3"
-  },
+  "author": "sakiyama",
+  "license": "MIT",
   "devDependencies": {
-    "babel-changed": "^8.0.0",
     "babel-cli": "^6.26.0",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "browser-sync": "^2.26.3",
-    "gulp": "^4.0.0",
-    "gulp-babel": "^7.0.1",
-    "gulp-changed": "^3.2.0",
-    "gulp-clean": "^0.4.0",
-    "gulp-cli": "^2.1.0",
-    "gulp-nodemon": "^2.4.2",
-    "gulp-plumber": "^1.2.1",
-    "gulp-sass": "^4.0.2"
-  }
+    "babel-eslint": "^8.1.2",
+    "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.23.5",
+    "gulp": "4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.3.3"
+  },
+  "description": ""
 }
