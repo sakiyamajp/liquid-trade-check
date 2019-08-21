@@ -7,11 +7,12 @@
     "css-compile": "gulp css-compile",
     "css-minify": "gulp css-minify",
     "js-build": "gulp js-build",
-    "js-minify": "gulp js-minify"
+    "js-minify": "gulp js-minify",
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
-    "url": "http://git.mdbootstrap.com/mdb/jquery/jq-gulp.git"
+    "url": "git@github.com:sakiyamajp/liquid-trade-check.git"
   },
   "author": "sakiyama",
   "license": "MIT",
