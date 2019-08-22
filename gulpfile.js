@@ -8,7 +8,6 @@ const minify = require('gulp-minify');
 const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
 const fs = require('fs');
-
 const cssAddonsPath = './css/modules/';
 
 // CSS Tasks
@@ -87,7 +86,7 @@ function reload(done) {
 }
 
 // Live Server
-gulp.task('server', function(done) {
+gulp.task('debug', function(done) {
   browserSync.init({
     port: process.env.PORT || 3000,
     server: {
@@ -96,6 +95,18 @@ gulp.task('server', function(done) {
     },
     notify: false
   });
+});
+var webserver = require('gulp-webserver');
+
+gulp.task('webserver', function() {
+  gulp.src('dist')
+    .pipe(webserver({
+      livereload: false,
+      directoryListing: false,
+      fallback: 'index.html',
+      open: false,
+      port: process.env.PORT || 3000,
+    }));
 });
 gulp.task('watchfiles', function(done) {
   gulp.watch("scss/**/*.scss", gulp.series('css-compile'));
@@ -106,7 +117,7 @@ gulp.task('watchfiles', function(done) {
   gulp.watch("**/*", {cwd: './dist/'}, reload);
 });
 // Watch on everything
-gulp.task('default',gulp.parallel('watchfiles','server'));
+gulp.task('default',gulp.parallel('watchfiles','debug'));
 function getJSModules() {
   delete require.cache[require.resolve('./js/modules.js')];
   return require('./js/modules');

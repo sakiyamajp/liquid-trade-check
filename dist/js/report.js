@@ -10,16 +10,16 @@ $(() => {
   form.submit(e => {
     e.preventDefault();
     e.stopPropagation();
-    $("input", form).each(function () {
-      localStorage.setItem($(this).attr('id'), $(this).val());
-    });
+    // $("input", form).each(function () {
+    //   localStorage.setItem($(this).attr('id'), $(this).val());
+    // });
     getFromLiquid($("#liquid_key").val(), $("#liquid_secret").val());
   });
   $("input", form).each(function () {
-    let val = localStorage.getItem($(this).attr('id'));
-    if (val) {
-      $(this).val(val);
-    }
+    // let val = localStorage.getItem($(this).attr('id'));
+    // if (val) {
+    //   $(this).val(val);
+    // }
   });
   $('#from').datepicker();
   form.submit();
@@ -166,7 +166,7 @@ async function getFromLiquid(id, token) {
   const liquid = new ccxt.liquid({
     apiKey: id,
     secret: token,
-    proxy: 'https://cors-anywhere.herokuapp.com/'
+    // proxy: 'https://cors-anywhere.herokuapp.com/'
   });
   let table = {};
   let max;
