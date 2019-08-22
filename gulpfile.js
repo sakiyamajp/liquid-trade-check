@@ -96,18 +96,6 @@ gulp.task('debug', function(done) {
     notify: false
   });
 });
-var webserver = require('gulp-webserver');
-
-gulp.task('webserver', function() {
-  gulp.src('dist')
-    .pipe(webserver({
-      livereload: false,
-      directoryListing: false,
-      fallback: 'index.html',
-      open: false,
-      port: process.env.PORT || 3000,
-    }));
-});
 gulp.task('watchfiles', function(done) {
   gulp.watch("scss/**/*.scss", gulp.series('css-compile'));
   gulp.watch(["dist/css/*.css", "!dist/css/*.min.css"], gulp.series('css-minify'));
