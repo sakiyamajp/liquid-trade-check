@@ -8,7 +8,7 @@
     "css-minify": "gulp css-minify",
     "js-build": "gulp js-build",
     "js-minify": "gulp js-minify",
-    "start": "gulp"
+    "start": "node ./node_modules/gulp/bin/gulp.js"
   },
   "repository": {
     "type": "git",
