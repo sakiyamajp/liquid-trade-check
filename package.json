@@ -17,6 +17,9 @@
   "author": "sakiyama",
   "license": "MIT",
   "devDependencies": {
+  },
+  "dependencies": {
+    "@babel/core": "^7.3.3",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.1.2",
     "babel-preset-env": "^1.6.1",
@@ -29,9 +32,6 @@
     "gulp-minify": "^3.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0"
-  },
-  "dependencies": {
-    "@babel/core": "^7.3.3"
   },
   "description": ""
 }
