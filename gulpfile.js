@@ -89,6 +89,7 @@ function reload(done) {
 // Live Server
 gulp.task('server', function(done) {
   browserSync.init({
+    port: 80,
     server: {
       baseDir: "./dist",
       directory: true
