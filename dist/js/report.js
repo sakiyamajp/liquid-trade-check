@@ -10,6 +10,9 @@ $(() => {
   form.submit(e => {
     e.preventDefault();
     e.stopPropagation();
+    if(!$(".loading").hasClass('d-none')){
+      return;
+    }
     $("input", form).each(function () {
       localStorage.setItem($(this).attr('id'), $(this).val());
     });
@@ -169,6 +172,8 @@ async function getFromLiquid(id, token) {
   let page = 1;
   let from = $("#from").val();
   from = new Date(from).getTime();
+  $(".loading").removeClass('d-none');
+
   while (true) {
     L("requesting page", page);
     let ds;
@@ -182,6 +187,7 @@ async function getFromLiquid(id, token) {
     } catch (e) {
       alert.text(e.message);
       alert.removeClass("d-none");
+      $(".loading").addClass('d-none');
       return;
     }
 
@@ -212,6 +218,7 @@ async function getFromLiquid(id, token) {
         price_range : range
       };
     });
+    $(".loading").addClass('d-none');
     for (let d of ds) {
       if (/*table[d.id] || */d.open.time.getTime() < from) {
         needBreak = true;
