@@ -165,7 +165,8 @@ async function getFromLiquid(id, token) {
   alert.addClass("d-none");
   const liquid = new ccxt.liquid({
     apiKey: id,
-    secret: token
+    secret: token,
+    proxy: 'https://cors-anywhere.herokuapp.com/'
   });
   let table = {};
   let max;
