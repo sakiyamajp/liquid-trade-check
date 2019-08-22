@@ -10,16 +10,16 @@ $(() => {
   form.submit(e => {
     e.preventDefault();
     e.stopPropagation();
-    // $("input", form).each(function () {
-    //   localStorage.setItem($(this).attr('id'), $(this).val());
-    // });
+    $("input", form).each(function () {
+      localStorage.setItem($(this).attr('id'), $(this).val());
+    });
     getFromLiquid($("#liquid_key").val(), $("#liquid_secret").val());
   });
   $("input", form).each(function () {
-    // let val = localStorage.getItem($(this).attr('id'));
-    // if (val) {
-    //   $(this).val(val);
-    // }
+    let val = localStorage.getItem($(this).attr('id'));
+    if (val) {
+      $(this).val(val);
+    }
   });
   $('#from').datepicker();
   form.submit();
@@ -67,11 +67,6 @@ function drawData(ds,from) {
   drawChart(ds);
 };
 function drawChart(ds) {
-  // Plotly.newPlot('profit_chart', [{
-  //   x: ds.map(d => d.open.time),
-  //   y: ds.map(d => d.total),
-  //   type: 'scatter'
-  // }]);
   let data = ds.map(d => {
     return {
       t : d.close.time.getTime(),
