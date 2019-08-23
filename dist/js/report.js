@@ -84,7 +84,8 @@ function drawChart(ds) {
               type: 'time',
               time: {
                   displayFormats: {
-                      hour: 'MM/DD HH:mm'
+                      hour: 'MM/DD HH:mm',
+                      minute : 'HH:mm',
                   }
               },
               gridLines: {
@@ -102,7 +103,7 @@ function drawChart(ds) {
           }],
       }
   };
-  var myLineChart = new Chart(profit_chart2.getContext('2d'), {
+  var myLineChart = new Chart(profit_chart.getContext('2d'), {
     type: 'line',
     data: {
       datasets: [{
