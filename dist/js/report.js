@@ -259,7 +259,7 @@ async function getFromLiquid(id, token) {
       break;
     }
     page++;
-    await sleep(1000);
+    await sleep(3000);
   }
   sliderDraw(Object.values(table),from);
   drawData(Object.values(table),from);
