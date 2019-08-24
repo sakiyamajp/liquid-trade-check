@@ -247,7 +247,6 @@ async function getFromLiquid(id, token) {
         price_range : range
       };
     });
-    $(".loading").addClass('d-none');
     for (let d of ds) {
       if (/*table[d.id] || */d.open.time.getTime() < from) {
         needBreak = true;
@@ -261,6 +260,7 @@ async function getFromLiquid(id, token) {
     page++;
     await sleep(3000);
   }
+  $(".loading").addClass('d-none');
   sliderDraw(Object.values(table),from);
   drawData(Object.values(table),from);
 }
