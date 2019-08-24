@@ -54,6 +54,9 @@ function hhmmss(secs) {
   return `${pad(hours)}:${pad(minutes)}:${pad(secs)}`;
 }
 function drawData(ds,from) {
+  if(myLineChart){
+    myLineChart.destroy();
+  }
   ds = ds.filter( d => {
     return d.open.time.getTime() >= from;
   });
@@ -91,6 +94,7 @@ function drawData(ds,from) {
   }
   drawChart(ds);
 };
+let myLineChart;
 function drawChart(ds) {
   let data = ds.map(d => {
     return {
@@ -128,7 +132,7 @@ function drawChart(ds) {
           }],
       }
   };
-  var myLineChart = new Chart(profit_chart.getContext('2d'), {
+  myLineChart = new Chart(profit_chart.getContext('2d'), {
     type: 'line',
     data: {
       datasets: [{
@@ -199,7 +203,6 @@ async function getFromLiquid(id, token) {
   let from = $("#from").val();
   from = new Date(from).getTime();
   $(".loading").removeClass('d-none');
-
   while (true) {
     L("requesting page", page);
     let ds;
