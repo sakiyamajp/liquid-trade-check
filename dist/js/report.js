@@ -25,8 +25,21 @@ $(() => {
     }
   });
   $('#from').datepicker();
+
   form.submit();
 });
+function sliderDraw(ds,min){
+  let e = $("#slider");
+  let eventFook = (e,ui) => {
+    drawData(ds,ui.value);
+  }
+  e.slider({
+    min: min,
+    max : new Date().getTime(),
+    change: eventFook,
+    slide: eventFook
+  });
+}
 function pad(num) {
   return ("0" + num).slice(-2);
 }
@@ -38,17 +51,23 @@ function hhmmss(secs) {
   return `${pad(hours)}:${pad(minutes)}:${pad(secs)}`;
 }
 function drawData(ds,from) {
+  ds = ds.filter( d => {
+    return d.open.time.getTime() >= from;
+  });
+  let total = 0;
+  for(let d of ds){
+    total += d.profit;
+    d.total = total;
+  }
   ds = ds.sort((a, b) => a.close.time.getTime() - b.close.time.getTime());
   let wins = ds.filter(d => d.profit > 0);
   function round5(d) {
     return Math.round(d * 100000) / 100000;
   }
-
   let draw = {};
   draw["期間"] = timeFormat(new Date(from)) + " ~ " + timeFormat(new Date());
   let span = new Date().getTime() - from;
   draw["期間"] += "  [" + hhmmss(span / 1000) + "]";
-
   draw["取引数"] = ds.length;
   draw["勝率"] = `${parseInt(wins.length / ds.length * 100)} % ( ${wins.length} / ${ds.length} )`;
   draw["損益"] = round5(d3.sum(ds, d => d.profit)) + " jpy";
@@ -79,6 +98,9 @@ function drawChart(ds) {
   let options = {
       aspectRatio : 3,
       legend : false,
+      animation: {
+        duration : 0
+      },
       scales: {
           xAxes: [{
               type: 'time',
@@ -125,19 +147,19 @@ function drawChart(ds) {
 }
 function drawTable(ds) {
   ds = ds.sort((a, b) => b.close.time.getTime() - a.close.time.getTime());
-  ds = ds.map(d => {
+  let forTable = ds.map(d => {
     d.open_price = d.open.price;
     d.close_price = d.close.price;
-    d.open = d.open.time;
-    d.close = d.close.time;
+    d.open_time = d.open.time;
+    d.close_time = d.close.time;
+    d.length =  parseInt((d.close.time - d.open.time) / 1000);
     return d;
   });
-  let keys = ["id","symbol","side","open","open_price","close","close_price","amount","profit"];
-  // let keys = Object.keys(ds[0]);
+  let keys = ["id","symbol","side","open_time","open_price","close_time","close_price","length","amount","profit"];
   $("table").removeClass('d-none');
   let trAll = d3.select("tbody")
     .selectAll("tr")
-    .data(ds, d => d.id);
+    .data(forTable, d => d.id);
   trAll.exit().remove();
   let trEnter = trAll.enter()
     .append("tr");
@@ -149,11 +171,11 @@ function drawTable(ds) {
   for(let name of keys){
     trEnter.select("td.table_" + name)
         .text(function(d){
-            if(name == "open" || name == "close"){
+            if(name == "open_time" || name == "close_time"){
               return timeFormat(d[name]);
             }
-            if(name == "open_price" || name == "close_price"){
-              return d[name];
+            if(name == "length"){
+              return d[name] + " sec";
             }
             return d[name];
         });
@@ -233,11 +255,6 @@ async function getFromLiquid(id, token) {
     page++;
     await sleep(1000);
   }
-  let ds = Object.values(table);
-  let total = 0;
-  for(let d of ds){
-    total += d.profit;
-    d.total = total;
-  }
-  drawData(ds,from);
+  sliderDraw(Object.values(table),from);
+  drawData(Object.values(table),from);
 }
