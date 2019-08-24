@@ -37,8 +37,11 @@ function sliderDraw(ds,min){
     min: min,
     max : new Date().getTime(),
     change: eventFook,
-    slide: eventFook
+    slide: eventFook,
+    step :60000,
+    value: min
   });
+
 }
 function pad(num) {
   return ("0" + num).slice(-2);
