@@ -194,7 +194,7 @@ async function getFromLiquid(id, token) {
   const liquid = new ccxt.liquid({
     apiKey: id,
     secret: token,
-    proxy: 'http://crosproxy.saky.work/'
+    proxy: 'https://crosproxy.saky.work/'
   });
   let table = {};
   let max;
