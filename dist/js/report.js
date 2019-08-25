@@ -194,7 +194,7 @@ async function getFromLiquid(id, token) {
   const liquid = new ccxt.liquid({
     apiKey: id,
     secret: token,
-    proxy: 'https://sakiyamacrosproxy.herokuapp.com/'
+    proxy: 'http://crosproxy.saky.work/'
   });
   let table = {};
   let max;
@@ -258,7 +258,7 @@ async function getFromLiquid(id, token) {
       break;
     }
     page++;
-    await sleep(3000);
+    await sleep(2000);
   }
   $(".loading").addClass('d-none');
   sliderDraw(Object.values(table),from);
