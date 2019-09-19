@@ -7881,10 +7881,6 @@ ul.stepper {
       color: #ffac47;
       transform: rotate(180deg); }
 
-body {
-  background-color: black;
-  color: #8e949a; }
-
 h5 {
   margin: 22px 0; }
 
@@ -7901,3 +7897,12 @@ table.table {
 
 #slider {
   margin: 13px 0; }
+
+.black-theme {
+  background-color: black;
+  color: #8e949a; }
+
+#camera {
+  position: absolute;
+  left: 81px;
+  top: 15px; }

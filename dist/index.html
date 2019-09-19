@@ -12,7 +12,7 @@
   <link href="https://code.jquery.com/ui/1.12.1/themes/dark-hive/jquery-ui.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
 </head>
-<body>
+<body class="black-theme">
   <div class="container">
       <div class="row">
           <div class="col-md-12">
@@ -48,9 +48,12 @@
             </p>
           </div>
           <div class="col-md-12">
-              <canvas id="profit_chart"></canvas>
-              <div id="slider"></div>
-              <dl class="row liquid_repot_draw"></dl>
+              <button type="button" id="camera" class="btn btn-sm btn-elegant"><i class="fas fa-camera pr-2" aria-hidden="true"></i>screen shot</button>
+              <div id="screenshot">
+                <canvas id="profit_chart"></canvas>
+                <div id="slider"></div>
+                <dl class="row liquid_repot_draw"></dl>
+              </div>
               <table class="table table-sm table-striped d-none">
                   <thead>
                       <tr>
@@ -103,6 +106,7 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ccxt@1.18.1072/dist/ccxt.browser.js"></script>
+  <script type="text/javascript" src="js/html2canvas.min.js"></script>
   <script type="text/javascript" src="js/report.js"></script>
 </body>
 </html>

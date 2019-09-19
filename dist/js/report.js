@@ -25,8 +25,20 @@ $(() => {
     }
   });
   $('#from').datepicker();
-
   form.submit();
+  $("#camera").on('click',() =>{
+    let options = {
+      backgroundColor : "#000000"
+    }
+    html2canvas($("#screenshot")[0],options).then(function(canvas) {
+      let a  = $('<a />');
+      a.attr("href",canvas.toDataURL("image/png"));
+      a.attr("download","liquid_trades.png");
+      a.text("here")
+      a[0].click();
+      // img = img.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+    });
+  });
 });
 function sliderDraw(ds,min){
   let e = $("#slider");
@@ -76,6 +88,7 @@ function drawData(ds,from) {
   draw["期間"] += "  [" + hhmmss(span / 1000) + "]";
   draw["取引数"] = ds.length;
   draw["勝率"] = `${parseInt(wins.length / ds.length * 100)} % ( ${wins.length} / ${ds.length} )`;
+  draw["平均数量"] = d3.mean(ds, d => d.amount).toPrecision(5)-0;
   draw["損益"] = round5(d3.sum(ds, d => d.profit)) + " jpy";
   draw["平均損益"] = round5(d3.mean(ds, d => d.profit)) + " jpy";
   draw["最大利益"] = d3.max(ds, d => d.profit) + " jpy";
